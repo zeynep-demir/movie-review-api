@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
+const allowedOrigins = ['https://movierankre.netlify.app'];
 
 const authRoutes = require('./routes/auth');
 const movieRoutes = require('./routes/movies');
@@ -13,9 +14,10 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: 'https://movierankre.netlify.app', // Your Netlify frontend URL
+  origin: allowedOrigins, // Your Netlify frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
   credentials: true, // Allow credentials (if needed, like cookies or tokens)
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
 app.use(bodyParser.json());
