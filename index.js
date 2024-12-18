@@ -12,7 +12,12 @@ const watchlistRoutes = require('./routes/watchlist');
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'https://movierankre.netlify.app', // Your Netlify frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+  credentials: true, // Allow credentials (if needed, like cookies or tokens)
+}));
+
 app.use(bodyParser.json());
 
 // MongoDB Connection
