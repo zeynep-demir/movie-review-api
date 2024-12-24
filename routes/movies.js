@@ -86,6 +86,45 @@ router.post('/:movieId/add-to-watchlist', authMiddleware, async (req, res) => {
   }
 });
 
+// POST route to add a new movie
+router.post("/", async (req, res) => {
+  try {
+    const { title, poster, description, releaseDate, genre, ratings, averageRating } = req.body;
+
+    // Validate required fields
+    if (!title || !poster || !description || !releaseDate || !genre) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+
+    // Create new movie
+    const newMovie = new Movie({
+      title,
+      poster,
+      description,
+      releaseDate,
+      genre,
+      ratings: ratings || [],
+      averageRating: averageRating || 0,
+    });
+
+    // Save movie to database
+    await newMovie.save();
+    res.status(201).json({ message: "Movie added successfully", movie: newMovie });
+  } catch (error) {
+    console.error("Error adding movie:", error.message);
+    res.status(500).json({ message: "Failed to add movie." });
+  }
+});
+
+router.delete('/', async (req, res) => {
+  try {
+    await Movie.deleteMany({}); // Tüm filmleri sil
+    res.status(200).json({ message: 'All movies deleted successfully.' });
+  } catch (error) {
+    console.error('Error deleting all movies:', error.message);
+    res.status(500).json({ message: 'Failed to delete all movies.' });
+  }
+});
 
 
 module.exports = router;
